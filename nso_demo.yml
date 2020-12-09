@@ -1,0 +1,69 @@
+---
+- hosts: localhost
+  vars:
+    packages:
+      - java-1.8.0-openjdk
+      - ant
+    nso_package: nso-5.3.linux.x86_64
+
+  tasks:
+
+    - name: Install NSO dependencies
+      yum:
+        name: "{{ packages }}"
+        state: present
+      become: yes
+
+    - name: Ensure that the NSO package is on the server
+      stat:
+        path: "/tmp/{{ nso_package }}"
+      register: nso
+
+    - name: Fail if nso package is missing
+      fail:
+        msg: "Please ensure the {{ nso_package }}.signed.bin is in /tmp"
+      when: nso.stat.exists
+
+    - name: Unpack NSO bin
+      shell:
+        chdir: /tmp
+        cmd: "sh {{ nso_package }}.signed.bin  --skip-verification"
+
+    - name: Check if the NSO directory already exists
+      stat:
+        path: "$HOME/nso"
+      register: nso_dir
+
+    - name: Install NSO into the home dir
+      shell:
+        chdir: /tmp
+        cmd: "sh {{ nso_package }}.installer.bin $HOME/nso --local-install"
+      when: not nso_dir.stat.isdir
+
+    - name: update bash profile
+      lineinfile:
+        dest: $HOME/.bash_profile
+        line: "source /home/student1/nso/ncsrc"
+
+
+    - name: set up NSO with packages
+      shell:
+        chdir: $HOME/nso
+        cmd: "source /home/student1/nso/ncsrc && ncs-setup --package ~/nso/packages/neds/cisco-ios-cli-3.8 --dest nso-instance"
+
+
+    - name: Download the demo snmp repo
+      git:
+        dest: "$HOME/nw-demo"
+        repo: 'https://github.com/termlen0/nw-demo'
+
+    - name: Move the nso-snmp package into the NSO instance
+      copy:
+        src: "$HOME/nw-demo/nso_demo/nso-snmp"
+        dest: "$HOME/nso/nso-instance/packages/"
+        remote_src: yes
+
+    - name: Start the NSO service
+      shell:
+        chdir: "$HOME/nso/nso-instance"
+        cmd: "source $HOME/nso/ncsrc && ncs"

@@ -4,9 +4,10 @@
   gather_facts: no
 
   vars:
+    nso_server: 192.168.1.250
     username: "admin"
     password: "admin"
-    url: "http://127.0.0.1:8080/jsonrpc"
+    url: "http://{{ nso_server }}:8080/jsonrpc"
     perform_backup: no
 
 
