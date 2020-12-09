@@ -21,9 +21,9 @@
         data:
           tailf-ncs:services:
             nso-snmp:nso-snmp:
-              - snmp_ro: "{{ input_snmp_ro | default("joonsnmp" )}}"
+              - snmp_ro: "{{ input_snmp_ro | default('joonsnmp') }}"
                 nso-snmp:device:
-                  - "{{ nso_device : default("rtr0") }}"
+                  - "{{ nso_device | default('rtr0') }}"
       changed_when: False
       register: r_sync
 
