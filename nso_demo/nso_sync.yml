@@ -1,6 +1,6 @@
 ---
 - name: Sync from device
-  hosts: rtr1
+  hosts: localhost
   gather_facts: no
   tags: sync_from
   vars:
@@ -12,7 +12,6 @@
 
 
   tasks:
-
     - name: Sync from one device
       nso_action:
         username: "{{ username }}"
@@ -42,7 +41,6 @@
 
 
 - name: Sync to device
-  hosts: rtr1
   gather_facts: no
   tags: sync_to
   tasks:
