@@ -6,7 +6,8 @@
   vars:
     username: "admin"
     password: "admin"
-    url: "http://127.0.0.1:8080/jsonrpc"
+    nso_server: 192.168.1.250
+    url: "http://{{ nso_server }}:8080/jsonrpc"
     perform_backup: no
 
 
@@ -44,12 +45,6 @@
   hosts: rtr1
   gather_facts: no
   tags: sync_to
-  vars:
-    username: "admin"
-    password: "admin"
-    url: "http://127.0.0.1:8080/jsonrpc"
-    perform_backup: no
-
   tasks:
     - name: Sync to a specific device
       nso_action:
