@@ -1,6 +1,6 @@
 ---
 - name: DEMO MULTI VENDOR DEPLOY
-  hosts: cisco,arista,juniper
+  hosts: all
   gather_facts: no
   tags: deploy
 
@@ -43,7 +43,7 @@
       when: target == 'ios' and ansible_network_os == 'ios'
 
 - name: DEMO MULTI VENDOR BACKOUT
-  hosts: cisco,arista,juniper
+  hosts: all
   gather_facts: no
   tags: backout
 
