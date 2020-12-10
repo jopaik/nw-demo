@@ -19,7 +19,7 @@
         password: "{{ password }}"
         url: "{{ url }}"
         path: /ncs:devices/sync-from
-        input: { 'device': [ "{{ inventory_hostname }}" ] }
+        input: { 'device': [rtr0,rtr1,rtr2] }
       changed_when: False
       register: r_sync
 
@@ -32,7 +32,7 @@
         password: "{{ password }}"
         url: "{{ url }}"
         path: /ncs:devices/check-sync
-        input: {}
+        input: { 'device' : [rtr0,rtr1,rtr2]}
       changed_when: False
       register: r_sync
 
@@ -52,7 +52,7 @@
         password: "{{ password }}"
         url: "{{ url }}"
         path: /ncs:devices/sync-to
-        input: { "device": ["{{ inventory_hostname }}"] }
+        input: { "device": [rtr0,rtr1,rtr2] }
       changed_when: False
       register: r_sync
 
